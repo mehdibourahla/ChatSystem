@@ -1,6 +1,6 @@
 <template>
   <form
-    class="flex flex-col items-center space-y-6 border m-4 p-4 rounded bg-gray-100"
+    class="m-auto max-w-2xl space-y-6 border p-4 rounded bg-gray-100"
     @submit="register"
   >
     <div class="w-full">

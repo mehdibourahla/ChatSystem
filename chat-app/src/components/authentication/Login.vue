@@ -1,6 +1,7 @@
 <template>
   <form
-    class="flex flex-col items-center space-y-6 border m-4 p-4 rounded bg-gray-100"
+    class="m-auto max-w-2xl space-y-6 border p-4 rounded bg-gray-100"
+    @submit="login"
   >
     <div class="w-full">
       <label class="block font-semibold" for="email">E-mail</label>
@@ -9,6 +10,7 @@
         type="email"
         id="email"
         placeholder="ex: Johndoe@example.com"
+        v-model="email"
       />
     </div>
     <div class="w-full">
@@ -18,6 +20,7 @@
         type="password"
         id="password"
         placeholder="ex: 12345678"
+        v-model="password"
       />
     </div>
     <button
@@ -30,7 +33,25 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "Login",
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    login(e) {
+      e.preventDefault();
+      let newUser = {
+        email: this.email,
+        password: this.password,
+      };
+      this.$emit("login-user", newUser);
+    },
+  },
+};
 </script>
 
 <style>
