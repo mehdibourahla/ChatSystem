@@ -1,12 +1,12 @@
 <template>
-  <Login @login-user="login" v-if="LoginVue" />
-  <Register @register-user="register" v-else />
+  <Login @login-user="loginUser" v-if="LoginVue" />
+  <Register @register-user="registerUser" v-else />
 </template>
 
 <script>
 import Login from "../components/authentication/Login";
 import Register from "../components/authentication/Register";
-
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Authentication",
   components: {
@@ -14,51 +14,27 @@ export default {
     Register,
   },
   methods: {
-    async register(newUser) {
-      const res = await fetch("api/register", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(newUser),
-      });
-      if (res.status === 201) {
-        let data = await res.json();
-        localStorage.setItem("user-token", data);
-        localStorage.setItem("user-id", data.user.id);
-
-        this.$emit("isLoggedIn", true);
-        this.$router.push("Main");
-      } else {
-        localStorage.removeItem("user-token");
-        console.error(res.statusText);
+    ...mapActions(["register", "login"]),
+    async registerUser(user) {
+      try {
+        await this.register(user);
+        this.$router.push("/main");
+      } catch (error) {
+        console.error(error);
       }
     },
 
-    async login(user) {
-      const res = await fetch("api/login", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-      if (res.status === 201) {
-        let data = await res.json();
-        localStorage.setItem("user-token", data.token);
-        localStorage.setItem("user-id", data.user.id);
-
-        this.$emit("isLoggedIn", true);
-        this.$router.push("Main");
-      } else {
-        localStorage.removeItem("user-token");
-        localStorage.removeItem("user-id");
-
-        console.error(res.statusText);
+    async loginUser(user) {
+      try {
+        await this.login(user);
+        this.$router.push("/main");
+      } catch (error) {
+        console.error(error);
       }
     },
   },
   computed: {
+    ...mapGetters([""]),
     LoginVue() {
       if (this.$route.path === "/login") {
         return true;

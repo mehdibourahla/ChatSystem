@@ -8,28 +8,21 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "Header",
   props: {
     isAuthenticated: Boolean,
   },
   methods: {
+    ...mapActions(["logout"]),
     async logout() {
-      const res = await fetch("api/logout", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({ id: localStorage.getItem("user-id") }),
-      });
-      if (res.ok) {
-        localStorage.removeItem("user-id");
-        localStorage.removeItem("user-token");
-        this.$emit("isLoggedIn", false);
-
+      try {
+        await this.logout();
         this.$router.push("/login");
-      } else {
-        console.error(res.statusText);
+      } catch (error) {
+        console.error(error);
       }
     },
   },

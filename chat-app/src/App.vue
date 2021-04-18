@@ -1,6 +1,6 @@
 <template>
   <div class="relative h-screen">
-    <Header @isLoggedIn="isLoggedIn" :isAuthenticated="isAuthenticated" />
+    <Header @isLoggedIn="isLoggedIn" />
     <router-view @isLoggedIn="isLoggedIn"></router-view>
     <Footer />
   </div>
@@ -19,12 +19,12 @@ export default {
   data() {
     return {
       messages: [],
-      isAuthenticated: false,
     };
   },
   methods: {
-    isLoggedIn(value) {
-      this.isAuthenticated = value;
+    async logout() {
+      await this.$store.dispatch("logout");
+      this.$router.push("/login");
     },
     sendMessage(message) {
       if (message.replace(/ /g, "")) {
@@ -33,6 +33,11 @@ export default {
         var container = this.$el.querySelector("#messages");
         container.scrollTop = container.scrollHeight;
       }
+    },
+  },
+  computed: {
+    isLoggedIn: function () {
+      return this.$store.getters.isAuthenticated;
     },
   },
 };
