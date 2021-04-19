@@ -2,7 +2,7 @@
   <div class="relative h-screen">
     <Header :isLoggedIn="isLoggedIn" />
     <router-view></router-view>
-    <Footer />
+    <!-- <Footer /> -->
   </div>
 </template>
 

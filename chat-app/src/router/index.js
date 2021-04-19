@@ -50,6 +50,16 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+  if (
+    (to.name !== "Login" || to.name !== "Register") &&
+    !store.getters.isLoggedIn
+  ) {
+    next();
+  } else {
+    next({
+      path: "/main",
+    });
+  }
 });
 
 export default router;
