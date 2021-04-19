@@ -3,9 +3,9 @@
     <router-link to="/">
       <h1 class="text-4xl font-bold text-blue-400">Messenger</h1>
     </router-link>
-    <div class="ml-auto cursor-pointer font-semibold">
-      <span v-text="user">user</span>
-      <span v-if="isLoggedIn" class="" @click="logout"> Logout </span>
+    <div v-if="isLoggedIn" class="ml-auto cursor-pointer font-semibold">
+      <span>{{ user.email }}</span>
+      <span class="" @click="logout"> Logout </span>
     </div>
   </div>
 </template>
@@ -17,9 +17,7 @@ export default {
     isLoggedIn: Boolean,
   },
   data() {
-    return {
-      user: this.$store.getters.getAuth || null,
-    };
+    return {};
   },
   methods: {
     logout() {
@@ -28,6 +26,11 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+  },
+  computed: {
+    user() {
+      return this.$store.getters.authUser;
     },
   },
 };

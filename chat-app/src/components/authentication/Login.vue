@@ -3,6 +3,9 @@
     class="m-auto max-w-2xl space-y-6 border p-4 rounded bg-gray-100"
     @submit="login"
   >
+    <div v-if="authError" class="w-full font-semibold text-red-400">
+      <span>*Login Failed: Your email or password is incorrect</span>
+    </div>
     <div class="w-full">
       <label class="block font-semibold" for="email">E-mail</label>
       <input
@@ -49,6 +52,11 @@ export default {
         password: this.password,
       };
       this.$emit("login-user", newUser);
+    },
+  },
+  computed: {
+    authError() {
+      return this.$store.getters.authStatus === "error";
     },
   },
 };

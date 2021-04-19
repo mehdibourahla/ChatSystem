@@ -3,8 +3,13 @@
     class="m-auto max-w-2xl space-y-6 border p-4 rounded bg-gray-100"
     @submit="register"
   >
+    <div v-if="authError" class="w-full font-semibold text-red-400">
+      <span>*Registration Failed: Please enter the required fields (*)</span>
+    </div>
     <div class="w-full">
-      <label class="block font-semibold" for="Username">Username</label>
+      <label class="block font-semibold" for="Username"
+        >Username <span class="text-red-400">*</span>
+      </label>
       <input
         class="border w-full p-2 rounded"
         type="text"
@@ -14,7 +19,9 @@
       />
     </div>
     <div class="w-full">
-      <label class="block font-semibold" for="email">E-mail</label>
+      <label class="block font-semibold" for="email"
+        >E-mail <span class="text-red-400">*</span></label
+      >
       <input
         class="border w-full p-2 rounded"
         type="email"
@@ -24,7 +31,9 @@
       />
     </div>
     <div class="w-full">
-      <label class="block font-semibold" for="password">Password</label>
+      <label class="block font-semibold" for="password"
+        >Password <span class="text-red-400">*</span></label
+      >
       <input
         class="border w-full p-2 rounded"
         type="password"
@@ -35,12 +44,13 @@
     </div>
     <div class="w-full">
       <label class="block font-semibold" for="password_confirmation"
-        >Password Confirmation</label
+        >Password Confirmation <span class="text-red-400">*</span></label
       >
       <input
         class="border w-full p-2 rounded"
         type="password"
         v-model="password_confirmation"
+        placeholder="Confirm password"
         id="password_confirmation"
       />
     </div>
@@ -74,6 +84,11 @@ export default {
         password_confirmation: this.password_confirmation,
       };
       this.$emit("register-user", newUser);
+    },
+  },
+  computed: {
+    authError() {
+      return this.$store.getters.authStatus === "error";
     },
   },
 };
