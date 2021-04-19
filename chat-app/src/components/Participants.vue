@@ -1,6 +1,8 @@
 <template>
-  <Participant />
-  <Participant />
+  <div class="bg-gray-200 flex flex-col justify-around row-span-5">
+    <Participant />
+    <Participant />
+  </div>
 </template>
 
 <script>

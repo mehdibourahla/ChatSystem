@@ -3,9 +3,7 @@
     <div id="messages" class="col-span-2 row-span-5 overflow-auto">
       <Messages :messages="messages"></Messages>
     </div>
-    <div class="bg-gray-200 flex flex-col justify-around row-span-5">
-      <Participants></Participants>
-    </div>
+    <Participants></Participants>
     <div class="col-span-3 bg-gray-200 py-2">
       <Input @send-message="sendMessage"></Input>
     </div>
@@ -13,7 +11,32 @@
 </template>
 
 <script>
-export default {};
+import Messages from "../components/Messages";
+import Participants from "../components/Participants";
+import Input from "../components/Input";
+export default {
+  name: "Main",
+  components: {
+    Messages,
+    Participants,
+    Input,
+  },
+  data() {
+    return {
+      messages: [],
+    };
+  },
+  methods: {
+    sendMessage(message) {
+      if (message.replace(/ /g, "")) {
+        this.messages.unshift(message);
+
+        var container = this.$el.querySelector("#messages");
+        container.scrollTop = container.scrollHeight;
+      }
+    },
+  },
+};
 </script>
 
 <style>

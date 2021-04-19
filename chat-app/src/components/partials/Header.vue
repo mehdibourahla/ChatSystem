@@ -3,24 +3,26 @@
     <router-link to="/">
       <h1 class="text-4xl font-bold text-blue-400">Messenger</h1>
     </router-link>
-    <h1 v-if="isAuthenticated" class="ml-auto" @click="logout">Logout</h1>
+    <h1
+      v-if="isLoggedIn"
+      class="ml-auto cursor-pointer font-semibold"
+      @click="logout"
+    >
+      Logout
+    </h1>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
 export default {
   name: "Header",
   props: {
-    isAuthenticated: Boolean,
+    isLoggedIn: Boolean,
   },
   methods: {
-    ...mapActions(["logout"]),
-    async logout() {
+    logout() {
       try {
-        await this.logout();
-        this.$router.push("/login");
+        this.$store.dispatch("logout");
       } catch (error) {
         console.error(error);
       }

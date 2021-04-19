@@ -1,7 +1,12 @@
-import { createRouter, createWebHistory } from "vue-router";
+import Vue from "vue";
+import VueRouter from "vue-router";
 import Home from "../views/Home";
 import Main from "../views/Main";
 import Authentication from "../views/Authentication";
+import store from "../store";
+
+Vue.use(VueRouter);
+
 const routes = [
   {
     path: "/",
@@ -12,6 +17,9 @@ const routes = [
     path: "/main",
     name: "Main",
     component: Main,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/register",
@@ -25,9 +33,23 @@ const routes = [
   },
 ];
 
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+const router = new VueRouter({
   routes,
+  mode: "history",
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters.isLoggedIn) {
+      next({
+        path: "/login",
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

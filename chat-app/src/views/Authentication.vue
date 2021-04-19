@@ -6,7 +6,7 @@
 <script>
 import Login from "../components/authentication/Login";
 import Register from "../components/authentication/Register";
-import { mapGetters, mapActions } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "Authentication",
   components: {
@@ -15,26 +15,23 @@ export default {
   },
   methods: {
     ...mapActions(["register", "login"]),
-    async registerUser(user) {
+    registerUser(user) {
       try {
-        await this.register(user);
-        this.$router.push("/main");
+        this.register(user);
       } catch (error) {
         console.error(error);
       }
     },
 
-    async loginUser(user) {
+    loginUser(user) {
       try {
-        await this.login(user);
-        this.$router.push("/main");
+        this.login(user);
       } catch (error) {
         console.error(error);
       }
     },
   },
   computed: {
-    ...mapGetters([""]),
     LoginVue() {
       if (this.$route.path === "/login") {
         return true;

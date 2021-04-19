@@ -1,12 +1,11 @@
 module.exports = {
-  devServer: {
-    proxy: {
-      "^/api": {
-        target: "http://localhost/msn/public",
-        changeOrigin: true,
-        logLevel: "debug",
-        pathRewrite: { "^/api": "/api" },
-      },
-    },
-  },
+    devServer: {
+        proxy: {
+            "/api": {
+                target: "http://localhost:8000",
+                changeOrigin: true,
+                logLevel: "debug"
+            }
+        }
+    }
 };
