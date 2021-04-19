@@ -3,13 +3,10 @@
     <router-link to="/">
       <h1 class="text-4xl font-bold text-blue-400">Messenger</h1>
     </router-link>
-    <h1
-      v-if="isLoggedIn"
-      class="ml-auto cursor-pointer font-semibold"
-      @click="logout"
-    >
-      Logout
-    </h1>
+    <div class="ml-auto cursor-pointer font-semibold">
+      <span v-text="user">user</span>
+      <span v-if="isLoggedIn" class="" @click="logout"> Logout </span>
+    </div>
   </div>
 </template>
 
@@ -18,6 +15,11 @@ export default {
   name: "Header",
   props: {
     isLoggedIn: Boolean,
+  },
+  data() {
+    return {
+      user: this.$store.getters.getAuth || null,
+    };
   },
   methods: {
     logout() {

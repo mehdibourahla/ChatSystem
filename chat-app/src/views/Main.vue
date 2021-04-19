@@ -21,6 +21,9 @@ export default {
     Participants,
     Input,
   },
+  created() {
+    this.$store.dispatch("getAuth");
+  },
   data() {
     return {
       messages: [],

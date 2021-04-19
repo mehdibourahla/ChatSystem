@@ -9,6 +9,7 @@ const state = {
 const getters = {
   isLoggedIn: state => !!state.token,
   authStatus: state => state.status,
+  authUser: state => state.user,
 };
 
 const actions = {
@@ -28,15 +29,16 @@ const actions = {
       });
   },
 
-  login({ commit }, user) {
+  login({ commit }, userForm) {
     commit("auth_request");
-    axios({ url: "api/login", data: user, method: "POST" })
+    axios({ url: "api/login", data: userForm, method: "POST" })
       .then(res => {
         let user = res.data.user;
         let token = res.data.token;
-        commit("auth_success", { user, token });
         localStorage.setItem("token", token);
+        commit("auth_success", { user, token });
         router.push("/main");
+        // this.dispatch("getAuth");
       })
       .catch(err => {
         commit("auth_error");
@@ -48,13 +50,24 @@ const actions = {
   logout({ commit }) {
     axios({
       url: "api/logout",
-      data: { id: state.user.id },
       method: "POST",
     })
       .then(() => {
         localStorage.removeItem("token");
         commit("logout");
         router.push("/");
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  },
+
+  getAuth({ commit }) {
+    axios({
+      url: "api/authUser",
+    })
+      .then(res => {
+        commit("SET_USER", res.data);
       })
       .catch(err => {
         console.error(err);
@@ -76,6 +89,9 @@ const mutations = {
   },
   logout(state) {
     (state.status = ""), (state.token = ""), (state.user = {});
+  },
+  SET_USER(state, user) {
+    state.user = user;
   },
 };
 

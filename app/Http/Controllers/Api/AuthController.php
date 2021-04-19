@@ -54,7 +54,7 @@ class AuthController extends Controller
         $token = $user->createToken('myapptoken')->plainTextToken;
 
         $response = [
-            'user' => $user,
+            'user' => $user->id,
             'token' => $token
         ];
 
@@ -70,7 +70,9 @@ class AuthController extends Controller
         ];
     }
 
-    public function getConnectedUser()
+    public function getAuthUser()
     {
+        $response = auth()->user();
+        return response($response);
     }
 }
