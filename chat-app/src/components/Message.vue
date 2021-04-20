@@ -1,8 +1,8 @@
 <template>
   <div class="flex items-start">
     <img src="../assets/logo.png" alt="" class="w-8 rounded-full border mr-1" />
-    <div class="bg-gray-300 rounded-lg p-2">
-      {{ text }}
+    <div v-bind:class="myMessage" class="rounded-lg p-2">
+      {{ message.message }}
     </div>
   </div>
 </template>
@@ -11,8 +11,14 @@
 export default {
   name: "Message",
   props: {
-    text: String,
-    author: Object,
+    message: Object,
+  },
+  computed: {
+    myMessage: function () {
+      return this.message.profile_id === this.$store.getters.authUser.id
+        ? "bg-blue-200 "
+        : "bg-gray-300";
+    },
   },
 };
 </script>

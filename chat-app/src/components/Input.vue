@@ -6,10 +6,13 @@
         v-model="message"
         class="rounded w-2/3 p-2"
         type="text"
-        name=""
-        id=""
       ></textarea>
-      <button type="submit" class="p-2 bg-green-500 rounded w-1/3">Send</button>
+      <button
+        type="submit"
+        class="p-2 bg-green-500 text-white font-semibold rounded w-1/3"
+      >
+        Send
+      </button>
     </div>
   </form>
 </template>

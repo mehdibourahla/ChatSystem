@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import authentication from "./modules/authentication";
+import participants from "./modules/participants";
+import messages from "./modules/messages";
 
 Vue.use(Vuex);
 
@@ -26,5 +28,7 @@ export default new Vuex.Store({
   },
   modules: {
     authentication,
+    participants,
+    messages,
   },
 });

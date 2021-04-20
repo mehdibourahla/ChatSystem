@@ -1,6 +1,10 @@
 <template>
   <div class="bg-gray-200 flex flex-col justify-around row-span-5">
-    <Participant />
+    <Participant
+      :key="participant.id"
+      v-for="participant in participants"
+      :participant="participant"
+    />
   </div>
 </template>
 
@@ -8,6 +12,9 @@
 import Participant from "./Participant";
 export default {
   name: "Participants",
+  props: {
+    participants: Array,
+  },
   components: {
     Participant,
   },

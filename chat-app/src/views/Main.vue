@@ -1,9 +1,11 @@
 <template>
   <div class="grid grid-cols-3 h-screen grid-rows-6">
     <div id="messages" class="col-span-2 row-span-5 overflow-auto">
-      <Messages :messages="messages"></Messages>
+      <Messages :messages="this.$store.getters.getMessages"></Messages>
     </div>
-    <Participants></Participants>
+    <Participants
+      :participants="this.$store.getters.getParticipants"
+    ></Participants>
     <div class="col-span-3 bg-gray-200 py-2">
       <Input @send-message="sendMessage"></Input>
     </div>
@@ -22,17 +24,17 @@ export default {
     Input,
   },
   created() {
-    this.$store.dispatch("getAuth");
+    if (this.$store.getters.isLoggedIn) {
+      this.$store.dispatch("getAuth");
+      this.$store.dispatch("getParticipants");
+      this.$store.dispatch("getMessages");
+    }
   },
-  data() {
-    return {
-      messages: [],
-    };
-  },
+
   methods: {
     sendMessage(message) {
       if (message.replace(/ /g, "")) {
-        this.messages.unshift(message);
+        this.$store.dispatch("sendMessage", message);
 
         var container = this.$el.querySelector("#messages");
         container.scrollTop = container.scrollHeight;
