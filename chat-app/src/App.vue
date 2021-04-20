@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-screen">
+  <div class="">
     <Header :isLoggedIn="isLoggedIn" />
     <Toaster
       :text="this.$store.getters.authStatus"

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-200 flex flex-col justify-around row-span-5">
+  <div class="bg-gray-200 flex flex-col justify-around">
     <Participant
       :key="participant.id"
       v-for="participant in participants"

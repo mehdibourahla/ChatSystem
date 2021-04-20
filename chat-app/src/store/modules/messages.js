@@ -29,7 +29,20 @@ const actions = {
   getMessages({ commit }) {
     axios({ url: "api/getMessages" })
       .then(res => {
-        commit("GET_MESSAGES", res.data);
+        commit("GET_MESSAGES", res.data.data);
+      })
+      .catch(err => {
+        console.error(err);
+        this.dispatch("setToast", {
+          status: "error",
+          text: "Error while getting messages",
+        });
+      });
+  },
+  loadMoreMessages({ commit }, page) {
+    axios({ url: `api/getMessages?page=${page}` })
+      .then(res => {
+        commit("LOAD_MESSAGES", res.data.data);
       })
       .catch(err => {
         console.error(err);
@@ -46,7 +59,12 @@ const mutations = {
     state.messages = messages;
   },
   SET_MESSAGE(state, message) {
-    state.messages.unshift(message);
+    state.messages = [message, ...state.messages];
+  },
+  LOAD_MESSAGES(state, messages) {
+    messages.forEach(message => {
+      state.messages.push(message);
+    });
   },
 };
 

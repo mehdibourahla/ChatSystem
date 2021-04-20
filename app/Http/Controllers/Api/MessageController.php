@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\MessageEvent;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,11 +17,12 @@ class MessageController extends Controller
         ]);
 
         $createdMessage = auth()->user()->profile->messages()->create($fields);
+        broadcast(new MessageEvent($createdMessage))->toOthers();
         return response($createdMessage);
     }
 
     public function index()
     {
-        return response(Message::orderBy('created_at', 'desc')->get());
+        return response(Message::orderBy('created_at', 'desc')->paginate(10));
     }
 }

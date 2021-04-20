@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-3 h-screen grid-rows-6">
-    <div id="messages" class="col-span-2 row-span-5 overflow-auto">
+  <div class="grid grid-cols-3">
+    <div id="messages" class="col-span-2 border">
       <Messages :messages="this.$store.getters.getMessages"></Messages>
     </div>
     <Participants
@@ -28,16 +28,27 @@ export default {
       this.$store.dispatch("getAuth");
       this.$store.dispatch("getParticipants");
       this.$store.dispatch("getMessages");
+
+      let pusher = new Pusher("e621f52f402d1a538a2f", {
+        cluster: "eu",
+      });
+      let channel = pusher.subscribe("message-channel");
+      channel.bind("new-message", () => {
+        this.$store.dispatch("getMessages");
+        var container = this.$el.querySelector("#messages");
+        container.scrollTop = container.scrollHeight;
+      });
     }
+  },
+
+  data() {
+    return {};
   },
 
   methods: {
     sendMessage(message) {
       if (message.replace(/ /g, "")) {
         this.$store.dispatch("sendMessage", message);
-
-        var container = this.$el.querySelector("#messages");
-        container.scrollTop = container.scrollHeight;
       }
     },
   },
