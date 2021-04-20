@@ -15,6 +15,10 @@ const getters = {
 const actions = {
   register({ commit }, newUser) {
     commit("auth_request");
+    this.dispatch("setToast", {
+      status: "loading",
+      text: "Authentication...",
+    });
     axios({
       url: "api/register",
       data: newUser,
@@ -24,41 +28,70 @@ const actions = {
         this.dispatch("login", newUser);
       })
       .catch(err => {
-        commit("auth_error");
+        commit("auth_error", err);
+        this.dispatch("setToast", {
+          status: "error",
+          text: "Registration Failed: Please enter the required fields (*)",
+        });
         console.error(err);
       });
   },
 
   login({ commit }, userForm) {
     commit("auth_request");
+    this.dispatch("setToast", {
+      status: "loading",
+      text: "Authentication...",
+    });
     axios({ url: "api/login", data: userForm, method: "POST" })
       .then(res => {
         let user = res.data.user;
         let token = res.data.token;
         localStorage.setItem("token", token);
         commit("auth_success", { user, token });
+        this.dispatch("setToast", {
+          status: "success",
+          text: `Login Successful: Welcome to Messenger ${user.name}`,
+        });
         router.push("/main");
-        // this.dispatch("getAuth");
       })
       .catch(err => {
-        commit("auth_error");
+        commit("auth_error", err);
+        this.dispatch("setToast", {
+          status: "error",
+          text: "Login Failed: Your email or password is incorrect.",
+        });
         localStorage.removeItem("token");
         console.error(err);
       });
   },
 
   logout({ commit }) {
+    commit("auth_request");
+    this.dispatch("setToast", {
+      status: "loading",
+      text: "Logging out...",
+    });
     axios({
       url: "api/logout",
       method: "POST",
     })
       .then(() => {
         localStorage.removeItem("token");
+        this.dispatch("setToast", {
+          status: "success",
+          text: `Logout Successful: Farewell ${state.user.name}!`,
+        });
         commit("logout");
         router.push("/");
       })
       .catch(err => {
         console.error(err);
+        commit("auth_error", err);
+        this.dispatch("setToast", {
+          status: "error",
+          text: "Log out failed",
+        });
       });
   },
 

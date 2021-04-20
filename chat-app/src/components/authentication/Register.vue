@@ -3,9 +3,6 @@
     class="m-auto max-w-2xl space-y-6 border p-4 rounded bg-gray-100"
     @submit="register"
   >
-    <div v-if="authError" class="w-full font-semibold text-red-400">
-      <span>*Registration Failed: Please enter the required fields (*)</span>
-    </div>
     <div class="w-full">
       <label class="block font-semibold" for="Username"
         >Username <span class="text-red-400">*</span>
