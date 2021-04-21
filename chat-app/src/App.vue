@@ -22,6 +22,9 @@ export default {
     Footer,
     Toaster,
   },
+  created() {
+    this.$store.dispatch("getAuth");
+  },
   methods: {
     async logout() {
       await this.$store.dispatch("logout");

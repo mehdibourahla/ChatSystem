@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home";
 import Main from "../views/Main";
 import Authentication from "../views/Authentication";
+import Profile from "../views/Profile";
 import store from "../store";
 
 Vue.use(VueRouter);
@@ -25,6 +26,14 @@ const routes = [
     path: "/register",
     name: "Register",
     component: Authentication,
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/login",
@@ -51,14 +60,14 @@ router.beforeEach((to, from, next) => {
     next();
   }
   if (
-    (to.name !== "Login" || to.name !== "Register") &&
-    !store.getters.isLoggedIn
+    (to.name === "Login" || to.name === "Register" || to.name === "Home") &&
+    store.getters.isLoggedIn
   ) {
-    next();
-  } else {
     next({
       path: "/main",
     });
+  } else {
+    next();
   }
 });
 

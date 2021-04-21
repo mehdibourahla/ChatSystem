@@ -1,6 +1,6 @@
 <template>
-  <form class="h-full" @submit="sendMessage" action="">
-    <div class="flex h-full">
+  <form class="" @submit="sendMessage" action="">
+    <div class="flex">
       <textarea
         v-on:keydown.enter="sendMessage"
         v-model="message"

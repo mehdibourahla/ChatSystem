@@ -2,7 +2,7 @@ import axios from "axios";
 import router from "../../router";
 const state = {
   user: {},
-  token: localStorage.getItem("token") || "",
+  token: sessionStorage.getItem("token") || "",
   status: "",
 };
 
@@ -24,8 +24,16 @@ const actions = {
       data: newUser,
       method: "POST",
     })
-      .then(() => {
-        this.dispatch("login", newUser);
+      .then(res => {
+        let user = res.data.user;
+        let token = res.data.token;
+        sessionStorage.setItem("token", token);
+        commit("auth_success", { user, token });
+        this.dispatch("setToast", {
+          status: "success",
+          text: `Registration Successful: Welcome to Messenger ${user.name}`,
+        });
+        router.push("/profile");
       })
       .catch(err => {
         commit("auth_error", err);
@@ -47,7 +55,7 @@ const actions = {
       .then(res => {
         let user = res.data.user;
         let token = res.data.token;
-        localStorage.setItem("token", token);
+        sessionStorage.setItem("token", token);
         commit("auth_success", { user, token });
         this.dispatch("setToast", {
           status: "success",
@@ -61,7 +69,7 @@ const actions = {
           status: "error",
           text: "Login Failed: Your email or password is incorrect.",
         });
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         console.error(err);
       });
   },
@@ -77,7 +85,7 @@ const actions = {
       method: "POST",
     })
       .then(() => {
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         this.dispatch("setToast", {
           status: "success",
           text: `Logout Successful: Farewell ${state.user.name}!`,

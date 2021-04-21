@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
+
 
 use App\Models\Profile;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
+use App\Http\Controllers\Controller;
+
 
 class ProfileController extends Controller
 {
@@ -48,7 +52,19 @@ class ProfileController extends Controller
      */
     public function update(Request $request, Profile $profile)
     {
-        //
+        // if (request('picture')) {
+        $imagePath = request('picture')->store('profile', 'public');
+
+        $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+        $image->save();
+        $imgArray = ['picture' => $imagePath];
+        // }
+
+        auth()->user()->profile->update([
+            'bio' => $request['bio'],
+            'picture' => $imgArray['picture']
+        ]);
+        return response(auth()->user()->profile);
     }
 
     /**

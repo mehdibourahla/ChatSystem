@@ -1,12 +1,20 @@
 <template>
-  <div class="grid grid-cols-3">
-    <div id="messages" class="col-span-2 border">
-      <Messages :messages="this.$store.getters.getMessages"></Messages>
+  <div class="h-screen">
+    <div class="flex h-2/3">
+      <div
+        v-on:scroll="handleScroll"
+        id="messages"
+        class="w-2/3 overflow-y-scroll border-2 rounded"
+      >
+        <Messages :messages="this.$store.getters.getMessages"></Messages>
+      </div>
+      <div class="w-1/3 border-2 rounded">
+        <Participants
+          :participants="this.$store.getters.getParticipants"
+        ></Participants>
+      </div>
     </div>
-    <Participants
-      :participants="this.$store.getters.getParticipants"
-    ></Participants>
-    <div class="col-span-3 bg-gray-200 py-2">
+    <div class="bg-gray-200 py-2 border-2 rounded">
       <Input @send-message="sendMessage"></Input>
     </div>
   </div>
@@ -25,7 +33,6 @@ export default {
   },
   created() {
     if (this.$store.getters.isLoggedIn) {
-      this.$store.dispatch("getAuth");
       this.$store.dispatch("getParticipants");
       this.$store.dispatch("getMessages");
 
@@ -35,14 +42,18 @@ export default {
       let channel = pusher.subscribe("message-channel");
       channel.bind("new-message", () => {
         this.$store.dispatch("getMessages");
-        var container = this.$el.querySelector("#messages");
-        container.scrollTop = container.scrollHeight;
+        this.setScroll();
       });
     }
   },
+  mounted() {
+    this.setScroll();
+  },
 
   data() {
-    return {};
+    return {
+      page: 1,
+    };
   },
 
   methods: {
@@ -50,6 +61,16 @@ export default {
       if (message.replace(/ /g, "")) {
         this.$store.dispatch("sendMessage", message);
       }
+    },
+    handleScroll(e) {
+      if (e.target.scrollTop === 0) {
+        this.page++;
+        this.$store.dispatch("loadMoreMessages", this.page);
+      }
+    },
+    setScroll() {
+      var container = this.$el.querySelector("#messages");
+      container.scrollTop = container.scrollHeight;
     },
   },
 };

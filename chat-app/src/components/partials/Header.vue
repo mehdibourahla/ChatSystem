@@ -4,7 +4,9 @@
       <h1 class="text-4xl font-bold text-blue-400">Messenger</h1>
     </router-link>
     <div v-if="isLoggedIn" class="ml-auto cursor-pointer font-semibold">
-      <span>{{ user.email }}</span>
+      <router-link to="/profile"
+        ><span>{{ user.email }}</span></router-link
+      >
       <span class="" @click="logout"> Logout </span>
     </div>
   </div>
